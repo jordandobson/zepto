@@ -30,6 +30,7 @@
 				<file name="style.js" />
 				<file name="event.js" />
 				<file name="ajax.js" />
+				<file name="attributes.js" />
 				<file name="classlist.js" />
 			</filelist>
 		</concat>

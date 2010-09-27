@@ -201,6 +201,31 @@
 				}
 			}
 			return ret;
+		},
+		
+		/**
+		 * Call method over each array/object item.
+		 * @param {(Object|Array)} collection
+		 * @param {function((number|string), *)} callback
+		 * @return {(Object|Array)}	Return collection for chaining.
+		 */
+		each : function(collection, callback){
+			var key,
+				value, 
+				i,
+				n = collection.length;
+			if(zepto.isDef(n)){ //is array or array like object
+				for(i = 0; i<n; i++){
+					value = collection[i];
+					if(callback.call(value, i, value) === false) break; //stop loop
+				}
+			}else{ //is regular object
+				for(key in collection){
+					value = collection[key];
+					if(callback.call(value, key, value) === false) break; //stop loop
+				}
+			}
+			return collection;
 		}
 		
 	});

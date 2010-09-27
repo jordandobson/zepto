@@ -10,6 +10,7 @@
   <script src="../src/event.js"></script>
   <script src="../src/ajax.js"></script>
   <script src="../src/classlist.js"></script>
+  <script src="../src/attributes.js"></script>
   <script src="evidence.js"></script>
 </head>
 <body>
@@ -23,7 +24,18 @@
     <span></span>
     <span class="nay" id="nay">nay</span>
   </p>
-  <script>  
+  <div id="tmp">&nbsp;</div> <!-- used for inserting/removing nodes -->
+  <script>
+  
+  	/*=========================== WARNING ===============================
+  	  
+  	  
+  	  	bad code ahead, don't use as a reference, many bad practices...
+  	  	used only for testing purposes
+  	  
+  	  
+  	  ===================================================================*/
+  
     Evidence.TestCase.extend('ZeptoTest', {
       
       testDollar: function(t){
@@ -260,16 +272,91 @@
       		return (i % 2)? i : null; //convert nodes into numbers and remove few items
       	});
       	t.assertEqual(mapped.get().join(','), compare.join(','));
-      }/*,
+      },
+      
+      testEach : function(t){
+      	var a = [1,2,3,4,5],
+      		b = {foo: 'bar', lorem: 'ipsum', a:1, b:2, c:3},
+      		c = {},
+      		count = 0;
+      	
+      	//array
+      	zepto.each(a, function(i, val){
+      		t.assertEqual(val, a[count]);
+      		t.assertEqual(val, a[i]);
+      		t.assertEqual(this, a[i]);
+      		count++;
+      	});
+      	
+      	//object
+      	zepto.each(b, function(key, val){
+      		t.assertEqual(val, b[key]);
+      		t.assertEqual(this, b[key]);
+      	});
+      	
+      	//array-like
+      	Array.prototype.push.apply(c, a);
+      	count = 0;
+      	zepto.each(c, function(i, val){
+      		t.assertEqual(val, c[count]);
+      		t.assertEqual(val, c[i]);
+      		t.assertEqual(this, c[i]);
+      		count++;
+      	});
+      	
+      },
+      
+      testAttr : function(t){
+      	var $el = $('.nay');
+      	
+      	t.assertEqual($el.attr('class'), 'nay');
+      	t.assertEqual($el.attr('id'), 'nay');
+      	
+      	$el.attr('data-foo', 'bar');
+      	t.assertEqual($el.attr('data-foo'), 'bar');
+      	$el.removeAttr('data-foo');
+      	t.assertEqual($el.attr('data-foo'), null);
+      	
+      	//confirm it didn't screwed things up
+      	t.assertEqual($el.attr('class'), 'nay');
+      	t.assertEqual($el.attr('id'), 'nay');
+      },
       
       testText : function(t){
-      	$(document.body).append('<div id="test_text" class="test">lorem<ul><li>ipsum</li><li>dolor</li></ul><img src="none.gif" alt="foo" /></div>');
+      	$('#tmp').html('<div id="test_text" class="test">lorem<ul><li>ipsum</li><li>dolor</li></ul><img src="#" alt="foo" /></div>');
       	t.assertEqual($('#test_text').text(), 'lorem ipsum dolor');
       	$('#test_text').text('foo bar');
       	t.assertEqual($('#test_text').text(), 'foo bar');
       	t.assertEqual($('#test_text').get(0).innerHTML, 'foo bar');
-      	$('#test_text')
-      }*/
+      	$('#tmp').html(''); //clear
+      },
+      
+      testVal : function(t){
+      	$('#tmp').html(
+			'<input type="text" id="txt_input" value="lorem ipsum" name="txt1" />'+
+			'<input type="checkbox" id="check_input" value="foo" name="c1" />'+
+			'<input type="checkbox" id="check_input2" value="bar" checked name="c2" />'+
+			'<input type="radio" id="radio_input1" value="0" checked name="r1" />'+
+			'<input type="radio" id="radio_input2" value="1" name="r2" />'+
+			'<select id="single">'+
+				'<option>Single1</option>'+
+				'<option>Single2</option>'+
+			'</select>'+
+			'<select id="multiple" multiple="multiple">'+
+				'<option selected="selected">Multiple1</option>'+
+				'<option>Multiple2</option>'+
+				'<option selected="selected">Multiple3</option>'+
+			'</select>'
+      	);
+      	
+      	t.assertEqual($('#txt_input').val(), 'lorem ipsum');
+      	t.assert(typeof $('#check_input').val() === 'undefined');
+      	t.assertEqual($('#check_input2').val(), 'bar');
+      	t.assertEqual($('#radio_input1').val(), '0');
+      	t.assert(typeof $('#radio_input2').val() === 'undefined');
+      	
+      	$('#tmp').html(''); //clear
+      }
 
     });
   </script>

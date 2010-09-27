@@ -1,8 +1,8 @@
 /**
- * @license zepto.js v0.1.4
+ * @license zepto.js v0.1.5
  * - original by Thomas Fuchs (http://github.com/madrobby/zepto), forked by Miller Medeiros (http://github.com/millermedeiros/zepto).
  * Released under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Build: 14 - Date: 09/24/2010 05:36 PM
+ * Build: 16 - Date: 09/27/2010 04:44 PM
  */
  
 (function(window, document){
@@ -201,6 +201,31 @@
 				}
 			}
 			return ret;
+		},
+		
+		/**
+		 * Call method over each array/object item.
+		 * @param {(Object|Array)} collection
+		 * @param {function((number|string), *)} callback
+		 * @return {(Object|Array)}	Return collection for chaining.
+		 */
+		each : function(collection, callback){
+			var key,
+				value, 
+				i,
+				n = collection.length;
+			if(zepto.isDef(n)){ //is array or array like object
+				for(i = 0; i<n; i++){
+					value = collection[i];
+					if(callback.call(value, i, value) === false) break; //stop loop
+				}
+			}else{ //is regular object
+				for(key in collection){
+					value = collection[key];
+					if(callback.call(value, key, value) === false) break; //stop loop
+				}
+			}
+			return collection;
 		}
 		
 	});
@@ -211,7 +236,7 @@
  */
  
 zepto.fn.extend({
-		
+	
 	/**
 	 * Get/Set elements innerHTML.
 	 * @param {string} [html]
@@ -429,6 +454,50 @@ zepto.extend({
 	}
 
 });
+/*
+ * zepto.js - Element.attributes module
+ */
+ 
+ /**
+  * @param {zepto} zepto
+  */
+(function(zepto){
+	
+	zepto.fn.extend({
+		
+		/**
+		 * Set one or more attributes for the set of matched elements.
+		 * @param {string} attributeName	The name of the attribute to set/get.
+		 * @param {string} [value]	The value of the attribute. If `null` will get value.
+		 * @return {(zepto|string)}	Attribute value or `zepto` object (for chaining).
+		 */
+		attr : function(attributeName, value){
+			//XXX: currently doesn't work like jQuery, maybe allow object of attributes and also a "map" function.
+			var ret;
+			if(zepto.isDef(value)){
+				ret = this.each(function(el){
+					el.setAttribute(attributeName, value);
+				});
+			}else{
+				ret = this.get(0).getAttribute(attributeName);
+			}
+			return (ret === null)? undefined : ret;
+		},
+		
+		/**
+		 * Remove an attribute from each element in the set of matched elements.
+		 * @param {string} attributeName
+		 * @return {zepto}
+		 */
+		removeAttr : function(attributeName){
+			return this.each(function(el){
+				el.removeAttribute(attributeName);
+			});
+		}
+		
+	});
+	
+}(zepto));
 /*
  * zepto.js - Element.classList module
  */
