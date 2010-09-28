@@ -1,12 +1,6 @@
-/*
- * zepto.js - Element.attributes module
- */
- 
- /**
-  * @param {zepto} zepto
-  */
-(function(zepto){
-	
+
+//================================== zepto.js : Element.attributes module ==================================//
+
 	zepto.fn.extend({
 		
 		/**
@@ -40,5 +34,3 @@
 		}
 		
 	});
-	
-}(zepto));

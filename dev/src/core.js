@@ -1,11 +1,5 @@
-/**
- * @license zepto.js v{{version_number}}
- * - original by Thomas Fuchs (http://github.com/madrobby/zepto), forked by Miller Medeiros (http://github.com/millermedeiros/zepto).
- * Released under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Build: {{build_number}} - Date: {{build_date}}
- */
- 
-(function(window, document){
+
+//================================== zepto.js : core module ==================================//
 	
 	/**
 	 * zepto.js
@@ -13,6 +7,7 @@
 	 * @namespace
 	 * @param {string|zepto|HTMLElement} [selector]
 	 * @param {HTMLElement|Document|zepto} [context]
+	 * @return {zepto}
 	 */
 	var zepto = function(selector, context){
 		if(this instanceof zepto){ //enforce `new` on constructor (scope-safe).
@@ -50,7 +45,7 @@
 		}else{
 			return new zepto(selector, context);
 		}
-	}
+	};
 	
 	/**
 	 * zepto.js
@@ -58,8 +53,9 @@
 	 * @namespace
 	 * @param {string|zepto|HTMLElement} [selector]
 	 * @param {HTMLElement|Document|zepto} [context]
+	 * @return {zepto}
 	 */
-	window.zepto = window.$ = zepto; //export '$' and 'zepto' to global scope
+	window['zepto'] = window['$'] = zepto; //export '$' and 'zepto' to global scope (used string to make closure compiler advanced happy)
 	
 	
 	/**
@@ -109,6 +105,7 @@
 		/**
 		 * Add a set of elements to the stack. 
 		 * @param {Array} elements	Selector string or Elements to be added to current stack.
+		 * @return {zepto}
 		 */
 		add : function(elements){
 			Array.prototype.push.apply(this, elements); //copy reference of elements to $[n] and update length (convert `zepto` into a pseudo-array object)
@@ -118,6 +115,7 @@
 		/**
 		 * Pass each element in the current matched set through a function, producing a new zepto object containing the return values. 
 		 * @param {function(this:Element, number, Element):*} callback	Function that will be called for each element.
+		 * @return {zepto}
 		 */
 		map : function(callback){
 			return zepto().add(zepto.map(this, function(el, i){
@@ -186,7 +184,8 @@
 		 * Translate all items in an array or array-like object to another array of items.
 		 * - similar to `jQuery.map` and not to `Array.prototype.map`
 		 * @param {Array} target	Array or Array-like Object to be mapped.
-		 * @param {function(*, number, Array): *} callback	Function called for each item on the array passing "item" as first parameter and "index" as second parameter and "base array" as 3rd, if callback returns any value besides `null` will add value to "mapped" array.  
+		 * @param {function(*, number, Array): *} callback	Function called for each item on the array passing "item" as first parameter and "index" as second parameter and "base array" as 3rd, if callback returns any value besides `null` will add value to "mapped" array.
+		 * @return {Array}  
 		 */
 		map : function(target, callback){
 			//didn't used `Array.prototype.map` because `jQuery.map` works different than JavaScript 1.6 `Array.map`
@@ -229,5 +228,3 @@
 		}
 		
 	});
-	
-}(window, document));

@@ -25,6 +25,7 @@
 		</tstamp>
 		<concat destfile="${js_deploy.dir}/${dist.name}" fixlastline="yes" eol="unix">
 			<filelist dir="${src.dir}">
+				<file name="intro.js" />
 				<file name="core.js" />
 				<file name="manipulation.js" />
 				<file name="style.js" />
@@ -32,6 +33,7 @@
 				<file name="ajax.js" />
 				<file name="attributes.js" />
 				<file name="classlist.js" />
+				<file name="outro.js" />
 			</filelist>
 		</concat>
 		<replace file="${js_deploy.dir}/${dist.name}">
