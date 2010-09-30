@@ -1,58 +1,75 @@
 
 //================================== zepto.js : core module ==================================//
 	
-	/**
-	 * zepto.js
-	 * @constructor
-	 * @namespace
-	 * @param {string|zepto|HTMLElement} [selector]
-	 * @param {HTMLElement|Document|zepto} [context]
-	 * @return {zepto}
-	 */
-	var zepto = function(selector, context){
-		if(this instanceof zepto){ //enforce `new` on constructor (scope-safe).
-			context = context || document;
-			
-			var	matched;
-			
-			//inspired by jQuery.init method (highly simplified)
-			if(selector){
+
+	var 
+		/**
+		 * zepto.js
+		 * @constructor
+		 * @namespace
+		 * @param {(string|zepto|HTMLElement|Function)} [selector]
+		 * @param {(HTMLElement|Document|zepto)} [context]
+		 * @return {zepto}
+		 */
+		zepto = function(selector, context){
+			if(this instanceof zepto){ //enforce `new` on constructor (scope-safe).
+				context = context || document;
 				
-				if(selector.nodeType){ //DOMElement
-					context = selector;
-					matched = [selector];
-					selector = null;
-				}else if(selector instanceof zepto){ //"clone" zepto object
-					selector = selector.selector;
-					context = selector.context;
+				var	matched;
+				
+				//inspired by jQuery.init method (highly simplified)
+				if(selector){
+					if(selector === window){
+						context = null;
+						matched = [window];
+					}else if(selector.nodeType){ //DOMElement
+						context = selector;
+						matched = [selector];
+						selector = null;
+					}else if(selector instanceof zepto){ //"clone" zepto object
+						selector = selector.selector;
+						context = selector.context;
+					}else if(zepto.isFunction(selector)){ //shotcut for "DOM ready"
+						zepto.ready(selector);
+						return this; //prevents adding selector/context/items
+					}
+					
+					if(context instanceof zepto){ //if finding descendant node(s) of all matched elements
+						matched = [];
+						context.each(function(el){
+							matched = matched.concat( zepto.makeArray(el.querySelectorAll(selector)) );
+						});
+						matched = zepto.unique(matched);
+					}else if(context && ! matched){ //avoid querySelector if `selector` is a DOMElement
+						matched = zepto.makeArray( context.querySelectorAll(selector) );
+					}
 				}
 				
-				if(context instanceof zepto){ //if finding descendant node(s) of all matched elements
-					matched = [];
-					context.each(function(el){
-						matched = matched.concat( zepto.makeArray(el.querySelectorAll(selector)) );
-					});
-					matched = zepto.unique(matched);
-				}else if(! matched){ //avoid querySelector if `selector` is a DOMElement
-					matched = zepto.makeArray( context.querySelectorAll(selector) );
-				}
+				this.selector = selector;
+				this.context = context;
+				this.add(matched);
+				
+			}else{
+				return new zepto(selector, context);
 			}
-			
-			this.selector = selector;
-			this.context = context;
-			this.add(matched);
-			
-		}else{
-			return new zepto(selector, context);
-		}
-	};
+		},
+		
+		/**
+		 * @type {RegExp}	remove white spaces from beginning and end of the string
+		 */
+		_regexTrim = /^\s+|\s+$/g,
+		
+		/**
+		 * @type {boolean}
+		 */
+		_hasReadyFix;
 	
 	/**
 	 * zepto.js
 	 * @constructor
 	 * @namespace
-	 * @param {string|zepto|HTMLElement} [selector]
-	 * @param {HTMLElement|Document|zepto} [context]
+	 * @param {(string|zepto|HTMLElement|Function)} [selector]
+	 * @param {(HTMLElement|Document|zepto)} [context]
 	 * @return {zepto}
 	 */
 	window['zepto'] = window['$'] = zepto; //export '$' and 'zepto' to global scope (used string to make closure compiler advanced happy)
@@ -62,6 +79,11 @@
 	 * @namespace reference to zepto.prototype for easy plugin developement
 	 */
 	zepto.fn = zepto.prototype = {
+		
+		/**
+		 * @type {number}	Number of matched elements.
+		 */
+		length : 0,
 		
 		/**
 		 * Execute a function for each matched element.
@@ -181,10 +203,32 @@
 		},
 		
 		/**
+		 * Check if parameter is a Function
+		 * @return {boolean} `true` if parameter is a Function.
+		 */
+		isFunction : function(param){
+			return (typeof param === 'function'); //be aware that this method doesn't work for all the browsers (used it since it works on the newest browsers)
+		},
+		
+		/**
+		 * Check if parameter is an Array
+		 * @return {boolean} `true` if parameter is an Array.
+		 */
+		isArray : function(param){
+			return (Object.prototype.toString.call(param) === '[object Array]');
+		},
+		
+		/**
+		 * An empty function
+		 * @type Function
+		 */
+		noop : function(){},
+		
+		/**
 		 * Translate all items in an array or array-like object to another array of items.
 		 * - similar to `jQuery.map` and not to `Array.prototype.map`
 		 * @param {Array} target	Array or Array-like Object to be mapped.
-		 * @param {function(*, number, Array): *} callback	Function called for each item on the array passing "item" as first parameter and "index" as second parameter and "base array" as 3rd, if callback returns any value besides `null` will add value to "mapped" array.
+		 * @param {function(*, number): *} callback	Function called for each item on the array passing "item" as first parameter and "index" as second parameter and "base array" as 3rd, if callback returns any value besides `null` will add value to "mapped" array.
 		 * @return {Array}  
 		 */
 		map : function(target, callback){
@@ -225,6 +269,37 @@
 				}
 			}
 			return collection;
+		},
+		
+		/**
+		 * Remove white spaces from begining and end of string
+		 * - as of 2010/09/24 Safari Mobile (iOS 4) doesn't support `String.prototype.trim`
+		 * @param {string} [str]
+		 * @return {string}
+		 */
+		trim : function(str){
+			return (str || '').replace(_regexTrim, '');
+		},
+		
+		/**
+		 * Specify a method to be called after DOM is "ready" (fully loaded). 
+		 * @param {function(zepto)} fn
+		 */
+		ready : function(fn){
+			if(! _hasReadyFix){
+				//fix back-forward button on browsers that caches JS state (iOS4, FF 1.5+) - see: https://developer.mozilla.org/En/Using_Firefox_1.5_caching
+				window.addEventListener('unload', zepto.noop, false); //prevents page from caching since `pageshow` doesn't solve problem on the iPhone (iOS4).
+				_hasReadyFix = true;
+			}
+			
+			if(document.readyState === 'complete'){ //if the document was already loaded
+				fn(zepto);
+			}else{ //if not ready yet
+				document.addEventListener('DOMContentLoaded', function(){
+					document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+					fn(zepto);
+				}, false);
+			}
 		}
 		
 	});

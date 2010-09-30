@@ -8,8 +8,7 @@
 		
 		//--- As of 2010/09/23 native HTML5 Element.classList is only supported by Firefox 3.6+ ---//
 		
-		var regexSpaces = /\s+/g,
-			regexTrim = /^\s+|\s+$/g;
+		var _regexSpaces = /\s+/g;
 		
 		/**
 		 * remove multiple spaces and trailing spaces
@@ -17,16 +16,7 @@
 		 * @return {string}
 		 */
 		function sanitize(className){
-			return trim( className.replace(regexSpaces, ' ') );
-		}
-		
-		/**
-		 * Remove white spaces from begining and end of string
-		 * - as of 2010/09/24 Safari Mobile doesn't support `String.prototype.trim`
-		 * @param {string} str
-		 */
-		function trim(str){
-			return str.replace(regexTrim, '');
+			return zepto.trim( className.replace(_regexSpaces, ' ') );
 		}
 		
 		/**
@@ -35,7 +25,7 @@
 		 */
 		function addClasses(el, className){
 			className = el.className +' '+ className; //all classes including repeated ones
-			var classesArr = zepto.unique( sanitize(className).split(regexSpaces) ); //avoid adding replicated items
+			var classesArr = zepto.unique( sanitize(className).split(_regexSpaces) ); //avoid adding replicated items
 			el.className = classesArr.join(' ');
 		}
 		
@@ -44,7 +34,7 @@
 		 * @return {RegExp}
 		 */
 		function createMatchClassRegExp(className){
-			return new RegExp('(?:^| )'+ sanitize(className).replace(regexSpaces, '|') +'(?: |$)', 'g'); //match all words contained on `className` string
+			return new RegExp('(?:^| )'+ sanitize(className).replace(_regexSpaces, '|') +'(?: |$)', 'g'); //match all words contained on `className` string
 		}
 		
 		/**
@@ -110,7 +100,7 @@
 				if(zepto.isDef(isAdd)){
 					(isAdd)? this.addClass(className) : this.removeClass(className); 
 				}else{
-					var classes = trim(className).split(' '),
+					var classes = zepto.trim(className).split(' '),
 						regex,
 						elements = this.get(); //for scope and performance
 					classes.forEach(function(c){

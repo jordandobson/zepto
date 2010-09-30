@@ -61,7 +61,7 @@
 		return this; //chain
 	};
 	
-	//create aliases "touchLeft", "touchRight", etc..
+	//create aliases "swipeLeft", "swipeRight", etc..
 	'left right up down'.split(' ').forEach(function(direction){
 		zepto.fn['swipe'+ direction.substr(0,1).toUpperCase() + direction.substr(1)] = function(callback, threshold){
 			return this.swipe(direction, callback, threshold);

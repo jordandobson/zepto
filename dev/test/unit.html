@@ -38,12 +38,27 @@
   
     Evidence.TestCase.extend('ZeptoTest', {
       
+      //called before each test
+      //setUp : function(){},
+      
+      //called after each test
+      tearDown : function(){
+      	$('#tmp').html(''); //remove temp nodes
+      },
+      
+      //---------- tests ------------//
+      
       testDollar: function(t){
-        t.assertEqual($('#some_element').get().length, 1);
+        t.assertEqual($('#some_element').length, 1);
         t.assertEqual($('#some_element').get(0), document.getElementById('some_element'));
         
-        t.assertEqual($('span').get().length, document.getElementsByTagName('span').length);
-        t.assertEqual($('p>span.yay').get().length, 1);
+        t.assertEqual($('span').length, document.getElementsByTagName('span').length);
+        t.assertEqual($('p>span.yay').length, 1);
+        
+        t.assertEqual($(window)[0], window);
+        t.assertEqual($('body').get(0), document.body);
+        t.assertEqual($().length, 0);
+        t.assertEqual($('').length, 0);
       },
       
       testCSS: function(t){
@@ -328,7 +343,6 @@
       	$('#test_text').text('foo bar');
       	t.assertEqual($('#test_text').text(), 'foo bar');
       	t.assertEqual($('#test_text').get(0).innerHTML, 'foo bar');
-      	$('#tmp').html(''); //clear
       },
       
       testVal : function(t){
@@ -354,8 +368,44 @@
       	t.assertEqual($('#check_input2').val(), 'bar');
       	t.assertEqual($('#radio_input1').val(), '0');
       	t.assert(typeof $('#radio_input2').val() === 'undefined');
+      },
+      
+      testIsFunction : function(t){
+      	var fn = function(){};
+      	t.assert($.isFunction(fn));
+      	t.assert($.isFunction($));
+      	t.assert($.isFunction($.isFunction));
+      	t.assert($.isFunction($.noop));
+      },
+      
+      testIsArray : function(t){
+      	var a;
       	
-      	$('#tmp').html(''); //clear
+      	a = [];
+      	t.assert($.isArray(a));
+      	a = [1,2,3];
+      	t.assert($.isArray(a));
+      	a = ['a','b','c'];
+      	t.assert($.isArray(a));
+      	a = new Array();
+      	t.assert($.isArray(a));
+      	a = new Array(1,2,3);
+      	t.assert($.isArray(a));
+      	a = new Array('a','b','c');
+      	t.assert($.isArray(a));
+      },
+      
+      testTrim : function(t){
+      	var a = '         lorem ipsum dolor',
+      		b = 'lorem ipsum dolor       ',
+      		c = '         lorem ipsum dolor       ',
+      		d = '	 	 	lorem       ipsum	dolor   		';
+      		
+      	t.assertEqual($.trim(a),'lorem ipsum dolor');
+      	t.assertEqual($.trim(b),'lorem ipsum dolor');
+      	t.assertEqual($.trim(c),'lorem ipsum dolor');
+      	t.assertEqual($.trim(d),'lorem       ipsum	dolor');
+      	t.assertEqual($.trim(),'');
       }
 
     });

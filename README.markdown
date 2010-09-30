@@ -47,12 +47,17 @@ Modern mobile browsers.
 
 ### Helpers ###
   
- - `$.isDef (param)` : Check if parameter is different than `undefined`.
+ - `$.isDef(param)` : Check if parameter is different than `undefined`.
+ - `$.isFunction(param)` : Check if parameter is a `Function`.
+ - `$.isArray(param)` : Check if parameter is an `Array`.
  - `$.unique(array)` : Return a new array that contain only unique items.
  - `$.makeArray(obj)` : Convert an array-like Object into an real array.
  - `$.extend(firstObj, secondObj)` : Mixin, copy properties from one object into another, will extend `zepto` by default if second parameter is omitted.
  - `$.map(array, callbackFn)` : Translate all items in an array or array-like object to another array of items. (similar to similar to `jQuery.map` and not to `Array.prototype.map`)
  - `$.each(collection, callbackFn(i|key, value))` : Call method over each array/object item.
+ - `$.noop` : Empty function.
+ - `$.trim(str)` : Remove white spaces from begining and end of string.
+ - `$.ready(fn)` : Specify a method to be called after DOM is "ready" (fully loaded).
 
 ### Event Handlers ###
 
