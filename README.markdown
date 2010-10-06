@@ -35,7 +35,7 @@ Modern mobile browsers.
  - `.html('new html')` : Set the contents of the element(s).
  - `.css('css properties')` : Set styles of the element(s).
  - `.append`, `prepend`, `after`, `before` : Like `html`, but append/prepend to element contents or before/after element.
- - `.anim(transform, opacity, duration)` : Use -webkit-transform/opacity and do an animation.
+ - `.transition(transform, opacity, duration, delay, ease)` : Use -webkit-transform/opacity and do an animation.
  - `.delegate(selector, eventType, handler)` : Attach an Event listener to matched elements using the event delegation pattern.
  - `.hasClass(className)` : Check if any matched element has given class.
  - `.addClass(className)` : Add one or more classes (separated by spaces) into each matched element.
@@ -84,6 +84,19 @@ Modern mobile browsers.
     $('#my_div').delegate('.touchable', 'touchstart', function(evt){
         alert("I'm touched!");
     });
+
+
+### Plugins ###
+
+#### swipe ####
+
+Custom "swipe" gesture event. (only works for touch enabled devices)
+
+ - `.swipe(directionStr, callbackFn, thresholdObj, preventScroll)`
+ - `.swipeLeft(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('left')`
+ - `.swipeRight(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('right')`
+ - `.swipeUp(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('up')`
+ - `.swipeDown(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('down')`
 
 
 ### Ajax: ###

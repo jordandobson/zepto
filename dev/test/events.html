@@ -58,7 +58,7 @@
 		<div class="holder">
 			<h2>swipe #2</h2>
 			<h3>bigger threshold and using aliases "swipeLeft/swipeRight/etc"</h3>
-			<p>should change colors based on direction and blink each time event dispatch.</p>
+			<p>should change colors based on direction and blink each time event dispatch. It should also prevent browser scroll (used specially because of "swipeUp/swipeDown").</p>
 			<p>needs a "longer" swipe than #1.</p>
 			<div id="swipe_test2" class="hitArea hitSwipe">
 				swipe me too but "harder"!
@@ -141,9 +141,9 @@
 		<script>
 			
 			function blink($el){
-				$el.anim(null, 0.3, 0.01);
+				$el.transition(null, 0.3, 0.01);
 				setTimeout(function(){
-					$el.anim(null, 1, 0.2);
+					$el.transition(null, 1, 0.2);
 				}, 100);
 			}
 			
@@ -187,7 +187,7 @@
 			//-- click/mouse events (mouseout/mouseover doesn't work properly on mobile devices, just for testing) --//
 			
 			$('#mouse_test')
-				.anim(null, 1, 0.2)
+				.transition(null, 1, 0.2)
 				.bind('click', function(e){
 					blink($(this));
 				})
@@ -201,7 +201,7 @@
 			
 			//-- swipe 2 --/
 			
-			//test aliases and custom threshold
+			//test aliases and custom threshold and lock scroll
 			$('#swipe_test2')
 				.swipeLeft(function(evtInfo){
 					var $el = $(this);
@@ -217,12 +217,12 @@
 					var $el = $(this);
 					$el.css('background-color:#00F');
 					blink($el);
-				}, {x:20, y:80})
+				}, {x:20, y:80}, true)
 				.swipeDown(function(){
 					var $el = $(this);
 					$el.css('background-color:#FF0');
 					blink($el);
-				}, {x:20, y:80});
+				}, {x:20, y:80}, true);
 			
 			
 			//-- delegate #1 --/

@@ -1,8 +1,8 @@
 /**!
- * @license zepto.js v0.1.6
+ * @license zepto.js v0.1.7
  * - original by Thomas Fuchs (http://github.com/madrobby/zepto), forked by Miller Medeiros (http://github.com/millermedeiros/zepto).
  * Released under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Build: 23 - Date: 09/29/2010 08:08 PM
+ * Build: 25 - Date: 10/05/2010 09:24 PM
  */
  
 (function(window, document){
@@ -400,12 +400,17 @@
 		 * Apply webkit transition to matched elements.
 		 * @param {string} transform
 		 * @param {number} opacity
-		 * @param {number} duration
+		 * @param {number} [duration] defaults to `500`
+		 * @param {number} [delay] defaults to `0`
+		 * @param {number} [ease] defaults to `"ease"`
 		 * @return {zepto}
 		 */
-		anim : function(transform, opacity, duration){
-			//TODO: change the way anim works, since it's overwriting the "-webkit-transition:all" it's hard to change other CSS values later without animation.
-			return this.css('-webkit-transition:all '+ (duration||0.5) +'s;'+'-webkit-transform:'+ transform +';opacity:'+ (opacity===0?0:opacity||1) );
+		transition : function(transform, opacity, duration, delay, ease){
+			duration = zepto.isDef(duration)? duration : 500;
+			//TODO: change the way transition works, since it's overwriting the "-webkit-transition:" it's hard to change other CSS values later with animation. It's also impossible to animate other values besides `transform` and `opacity`. Maybe create a separate plugin that does the heavy lift with callbacks, etc..
+			var str = zepto.isDef(transform)? '-webkit-transform:'+ transform +';' : '';
+			str += zepto.isDef(opacity)? 'opacity:'+ opacity +';' : ''; 
+			return this.css('-webkit-transition:-webkit-transform, opacity '+ duration +'ms,'+ duration +'ms '+ (ease||'ease')+' '+ (delay||0) +'ms;' + str);
 		}
 		
 	});

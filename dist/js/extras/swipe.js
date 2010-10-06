@@ -6,9 +6,10 @@
 	/**
 	 * @param {string} direction	Swipe direction ('left', 'right', 'up', 'down')
 	 * @param {function({direction: string, changeX: number, changeY: number})} callback
-	 * @param {{x: number, y: number}} threshold
+	 * @param {{x: number, y: number}} [threshold]	Defaults to {x:30, y:30}
+	 * @param {boolean} [preventScroll]	If touchmove should block scroll, IMPORTANT: defaults to `false`.
 	 */
-	zepto.fn.swipe = function(direction, callback, threshold){
+	zepto.fn.swipe = function(direction, callback, threshold, preventScroll){
 		
 		var thold = {x:30, y:30}, //default threshold
 			origin = {x:0, y:0},
@@ -27,7 +28,7 @@
 		}
 		
 		function onTouchMove(evt){
-			evt.preventDefault();
+			if(preventScroll) evt.preventDefault();
 			updateCords(dest, evt);
 		}
 		
@@ -63,8 +64,8 @@
 	
 	//create aliases "swipeLeft", "swipeRight", etc..
 	'left right up down'.split(' ').forEach(function(direction){
-		zepto.fn['swipe'+ direction.substr(0,1).toUpperCase() + direction.substr(1)] = function(callback, threshold){
-			return this.swipe(direction, callback, threshold);
+		zepto.fn['swipe'+ direction.substr(0,1).toUpperCase() + direction.substr(1)] = function(callback, threshold, preventScroll){
+			return this.swipe(direction, callback, threshold, preventScroll);
 		};
 	});
 	
