@@ -1,6 +1,10 @@
 
 //================================== zepto.js : HTML manipulation module ==================================//
 
+(function(zepto, document){
+	
+	var stripHtmlRegex = /(?:<[^>]*>)+/g; //match HTML tags
+	
 	zepto.fn.extend({
 		
 		/**
@@ -15,6 +19,24 @@
 				});
 			}else{
 				return this.get(0).innerHTML;
+			}
+		},
+		
+		/**
+		 * Get/Set element text content.
+		 * @param {string} [txt]
+		 * @return {zepto|string}
+		 */
+		text : function(txt){
+			var tmp = [];
+			if(zepto.isDef(txt)){
+				return this.append(document.createTextNode(txt));
+			}else{
+				//jquery returns the combined text of all the matched elements.
+				this.each(function(el){
+					tmp.push(el.innerHTML);
+				});
+				return tmp.join(' ').replace(stripHtmlRegex, ' '); //FIXME: should add space between each tag, maybe switch to `Element.nodeValue` instead of regexp.
 			}
 		},
 		
@@ -67,3 +89,5 @@
 		}
 		
 	});
+	
+}(zepto, document));

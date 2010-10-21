@@ -1,8 +1,8 @@
 /**!
- * @license zepto.js v0.1.7
+ * @license zepto.js v0.1.7.2
  * - original by Thomas Fuchs (http://github.com/madrobby/zepto), forked by Miller Medeiros (http://github.com/millermedeiros/zepto).
  * Released under the MIT license (http://www.opensource.org/licenses/mit-license.php)
- * Build: 25 - Date: 10/05/2010 09:24 PM
+ * Build: 27 - Date: 10/21/2010 01:27 PM
  */
  
 (function(window, document){
@@ -314,6 +314,10 @@
 
 //================================== zepto.js : HTML manipulation module ==================================//
 
+(function(zepto, document){
+	
+	var stripHtmlRegex = /(?:<[^>]*>)+/g; //match HTML tags
+	
 	zepto.fn.extend({
 		
 		/**
@@ -328,6 +332,24 @@
 				});
 			}else{
 				return this.get(0).innerHTML;
+			}
+		},
+		
+		/**
+		 * Get/Set element text content.
+		 * @param {string} [txt]
+		 * @return {zepto|string}
+		 */
+		text : function(txt){
+			var tmp = [];
+			if(zepto.isDef(txt)){
+				return this.append(document.createTextNode(txt));
+			}else{
+				//jquery returns the combined text of all the matched elements.
+				this.each(function(el){
+					tmp.push(el.innerHTML);
+				});
+				return tmp.join(' ').replace(stripHtmlRegex, ' '); //FIXME: should add space between each tag, maybe switch to `Element.nodeValue` instead of regexp.
 			}
 		},
 		
@@ -380,6 +402,8 @@
 		}
 		
 	});
+	
+}(zepto, document));
 
 //================================== zepto.js : style module ==================================//
  
@@ -391,6 +415,7 @@
 		 * @return {zepto}
 		 */
 		css : function(css){
+			//TODO: change the way it works to match jQuery.
 			return this.each(function(el){
 				el.style.cssText += ';'+ css; 
 			});
@@ -488,12 +513,12 @@
 					}else if(error){
 						error(xhr.status, xhr.statusText);
 					}
-					xhr.removeEventLister('readystatechange', xhrStateHandler);
+					xhr.removeEventListener('readystatechange', xhrStateHandler);
 				}
 			}
 			
 			if(success || error){ //only attach listener if required
-				xhr.addEventLister('readystatechange', xhrStateHandler, false);
+				xhr.addEventListener('readystatechange', xhrStateHandler, false);
 			}
 			
 			xhr.open(method, url, true);

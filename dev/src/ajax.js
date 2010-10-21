@@ -22,12 +22,12 @@
 					}else if(error){
 						error(xhr.status, xhr.statusText);
 					}
-					xhr.removeEventLister('readystatechange', xhrStateHandler);
+					xhr.removeEventListener('readystatechange', xhrStateHandler);
 				}
 			}
 			
 			if(success || error){ //only attach listener if required
-				xhr.addEventLister('readystatechange', xhrStateHandler, false);
+				xhr.addEventListener('readystatechange', xhrStateHandler, false);
 			}
 			
 			xhr.open(method, url, true);

@@ -2,15 +2,18 @@
 
 This is a fork of [Thomas Fuchs](http://mir.aculo.us/) minimalistic JavaScript framework [zepto.js](http://github.com/madrobby/zepto).
 
-It was based on a *early stage* of the framework but **branched into a completely different direction**, the core structure was totally refactored. **It may have extra/missing features** and/or **different API** than the original.
-
-**The code structure/implementations are diverging from the original at each day.**
+It was based on a *early stage* of the framework but **branched into a completely different direction**, the core structure was totally refactored. **It may have extra/missing features** and/or **different API** than the original. **The code structure/implementations are diverging from the original at each day.**
 
 To know more about why this branch was created and what should come next see this [pull request](http://github.com/madrobby/zepto/pull/5).
 
 The main idea is to keep the API as close as possible to jQuery without bloating the code size but focusing on the most important/used methods, features will be added as needed and will try to unit test 100% of the API.
 
 **Some changes implemented on this branch may be added to the main one but probably most of them won't**.
+
+
+## Important ##
+
+**This branch favors good practices and readability over file-size**, specially since modern compressors/minifiers does a good job at reducing code size, for more details read: [The Performance Dogma](http://blog.millermedeiros.com/2010/10/the-performance-dogma/).
 
 
 ## Targets ##
@@ -27,44 +30,44 @@ Modern mobile browsers.
 
 ### Element functions ###
   
- - `.each(fn)` : Execute a function for each matched element.
- - `.get()` : Return array of all elements found.
- - `.get(0)` : Return first element found.
- - `.eq(1)` : Reduce matched elements to a single el0ement by index.
- - `.find('selector')` : Match descendant element(s) based on selector.
- - `.html('new html')` : Set the contents of the element(s).
- - `.css('css properties')` : Set styles of the element(s).
- - `.append`, `prepend`, `after`, `before` : Like `html`, but append/prepend to element contents or before/after element.
- - `.transition(transform, opacity, duration, delay, ease)` : Use -webkit-transform/opacity and do an animation.
- - `.delegate(selector, eventType, handler)` : Attach an Event listener to matched elements using the event delegation pattern.
- - `.hasClass(className)` : Check if any matched element has given class.
- - `.addClass(className)` : Add one or more classes (separated by spaces) into each matched element.
- - `.removeClass(className)` : Removes one or more class names (separated by spaces) from matched elements, removes all classes if `null`.
- - `.toggleClass(className, switch)` : Add or remove one or more classes from each element in the set of matched elements.
- - `.add(elementsArray)` : Add a set of elements to the matched elements set.
- - `.map(callbackFn(i, element))` : Pass each element in the current matched set through a function, producing a new zepto object containing the return values.
- - `.attr(name, value)` : Set/get attribute value.
+ - `.each(fn)` - Execute a function for each matched element.
+ - `.get()` - Return array of all elements found.
+ - `.get(0)` - Return first element found.
+ - `.eq(1)` - Reduce matched elements to a single el0ement by index.
+ - `.find('selector')` - Match descendant element(s) based on selector.
+ - `.html('new html')` - Set the contents of the element(s).
+ - `.css('css properties')` - Set styles of the element(s).
+ - `.append`, `prepend`, `after`, `before` - Like `html`, but append/prepend to element contents or before/after element.
+ - `.transition(transform, opacity, duration, delay, ease)` - Use -webkit-transform/opacity and do an animation.
+ - `.delegate(selector, eventType, handler)` - Attach an Event listener to matched elements using the event delegation pattern.
+ - `.hasClass(className)` - Check if any matched element has given class.
+ - `.addClass(className)` - Add one or more classes (separated by spaces) into each matched element.
+ - `.removeClass(className)` - Removes one or more class names (separated by spaces) from matched elements, removes all classes if `null`.
+ - `.toggleClass(className, switch)` - Add or remove one or more classes from each element in the set of matched elements.
+ - `.add(elementsArray)` - Add a set of elements to the matched elements set.
+ - `.map(callbackFn(i, element))` - Pass each element in the current matched set through a function, producing a new zepto object containing the return values.
+ - `.attr(name, value)` - Set/get attribute value.
 
 ### Helpers ###
   
- - `$.isDef(param)` : Check if parameter is different than `undefined`.
- - `$.isFunction(param)` : Check if parameter is a `Function`.
- - `$.isArray(param)` : Check if parameter is an `Array`.
- - `$.unique(array)` : Return a new array that contain only unique items.
- - `$.makeArray(obj)` : Convert an array-like Object into an real array.
- - `$.extend(firstObj, secondObj)` : Mixin, copy properties from one object into another, will extend `zepto` by default if second parameter is omitted.
- - `$.map(array, callbackFn)` : Translate all items in an array or array-like object to another array of items. (similar to similar to `jQuery.map` and not to `Array.prototype.map`)
- - `$.each(collection, callbackFn(i|key, value))` : Call method over each array/object item.
- - `$.noop` : Empty function.
- - `$.trim(str)` : Remove white spaces from begining and end of string.
- - `$.ready(fn)` : Specify a method to be called after DOM is "ready" (fully loaded).
+ - `$.isDef(param)` - Check if parameter is different than `undefined`.
+ - `$.isFunction(param)` - Check if parameter is a `Function`.
+ - `$.isArray(param)` - Check if parameter is an `Array`.
+ - `$.unique(array)` - Return a new array that contain only unique items.
+ - `$.makeArray(obj)` - Convert an array-like Object into an real array.
+ - `$.extend(firstObj, secondObj)` - Mixin, copy properties from one object into another, will extend `zepto` by default if second parameter is omitted.
+ - `$.map(array, callbackFn)` - Translate all items in an array or array-like object to another array of items. (similar to similar to `jQuery.map` and not to `Array.prototype.map`)
+ - `$.each(collection, callbackFn(i|key, value))` - Call method over each array/object item.
+ - `$.noop` - Empty function.
+ - `$.trim(str)` - Remove white spaces from begining and end of string.
+ - `$.ready(fn)` - Specify a method to be called after DOM is "ready" (fully loaded).
 
 ### Event Handlers ###
 
 #### bind/unbind ####
 
- - `.bind(eventType, eventHandler)` : Attach event listener onto each matched element.
- - `.unbind(eventType, eventHandler)` : Remove event listener from each matched element, *(both parameters are required)*.
+ - `.bind(eventType, eventHandler)` - Attach event listener onto each matched element.
+ - `.unbind(eventType, eventHandler)` - Remove event listener from each matched element, *(both parameters are required)*.
 
 ##### example #####
 
@@ -78,7 +81,7 @@ Modern mobile browsers.
 
 #### delegate ("live" event) ####
 
-`.delegate(selector, eventType, eventHandler)` : Listen for events triggered by descendant nodes of matched elements - A.K.A "event delegation".
+`.delegate(selector, eventType, eventHandler)` - Listen for events triggered by descendant nodes of matched elements - A.K.A "event delegation".
 
     //will trigger when any descendant element of "#my_div" that has the class ".touchable" is touched
     $('#my_div').delegate('.touchable', 'touchstart', function(evt){
@@ -92,12 +95,11 @@ Modern mobile browsers.
 
 Custom "swipe" gesture event. (only works for touch enabled devices)
 
- - `.swipe(directionStr, callbackFn, thresholdObj, preventScroll)`
- - `.swipeLeft(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('left')`
- - `.swipeRight(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('right')`
- - `.swipeUp(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('up')`
- - `.swipeDown(callbackFn, thresholdObj, preventScroll)` : alias to `.swipe('down')`
-
+ - `.swipe(directionStr, endCallbackFn, [thresholdObj], [preventScroll])`
+  - directionStr: 'up', 'down', 'left', 'right' - direction of swipe gesture.
+  - endCallbackFn({direction: string, changeX: number, changeY: number}) - called on touch end if gesture matches threshold.
+  - thresholdObj : {x: number, y:number} : defines how accurate the swipe gesture needs to be.
+  - preventScroll : boolean - prevent browser scroll.
 
 ### Ajax: ###
 
@@ -112,8 +114,6 @@ Custom "swipe" gesture event. (only works for touch enabled devices)
 ### Future improvements ###
 
  - Add sniffing based on feature detection, maybe only load *zepto.min.js* and subsequent files if browser support required features.
- - Maybe create different builds that removes specific modules.
- - Add JSLint to build process.
 
 ### Recommendations ###
 

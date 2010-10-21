@@ -9,6 +9,7 @@
 		 * @return {zepto}
 		 */
 		css : function(css){
+			//TODO: change the way it works to match jQuery.
 			return this.each(function(el){
 				el.style.cssText += ';'+ css; 
 			});
