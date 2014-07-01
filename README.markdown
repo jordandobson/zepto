@@ -59,7 +59,7 @@ Modern mobile browsers.
  - `$.map(array, callbackFn)` - Translate all items in an array or array-like object to another array of items. (similar to similar to `jQuery.map` and not to `Array.prototype.map`)
  - `$.each(collection, callbackFn(i|key, value))` - Call method over each array/object item.
  - `$.noop` - Empty function.
- - `$.trim(str)` - Remove white spaces from begining and end of string.
+ - `$.trim(str)` - Remove white spaces from beginning and end of string.
  - `$.ready(fn)` - Specify a method to be called after DOM is "ready" (fully loaded).
 
 ### Event Handlers ###
